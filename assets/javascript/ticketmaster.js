@@ -1,13 +1,14 @@
+require('dotenv').config()
+
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
 
 
-require("jsdom").env("", function (err, window) {
-    if (err) {
-        console.error(err);
-        return;
-    }
 
-    var $ = require("jquery")(window);
-});
+var $ = jQuery = require('jquery')(window);
 
 
 
