@@ -31,41 +31,44 @@ function apiEvents(artist) {
     let keyword = "keyword=" + artist;
     let query = apiTM + "events.json?" + size + apiKey + keyword;
     console.log(query)
-    api(query);
+  
 }
 
-function api(query) {
-    axios.get(query)
-    .then(function (response) {
-        console.log("result-------------------------------")
-        console.log(response);
-        console.log("result-----------------------")
-        console.log(response._embedded);
-            console.log("eventSearch")
-            console.log(response._embedded.events[i])
-            let result = {
-                id: response._embedded.events.id,
-                name: response._embedded.events.name,
-                date: response._embedded.events.dates.start.localDate,
-                venue: response._embedded.events._embedded.venues[0].name,
-                address: _embedded.events._embedded.venues[0].address.line1,
-                city: _embedded.events._embedded.venues[0].city.name,
-                state: _embedded.events._embedded.venues[0].state.stateCode,
-                postalCode: _embedded.events._embedded.venues[0].postalCode,
-                fullAddress: address + ", " + city + ", " + state + " " + postalCode
-            }
-            console.log("result-----------------------")
-            console.log(result)
-            console.log("result-------------------------")
-    });
-};
+    axios.get("https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=RlocwbBCGMdcYb9eMmGaGmTW0WiIGb8G&keyword" + artist)
+        .then(function (response) {
+            console.log("result")
+            console.log(response.data._embedded.events[0]._embedded.venues[0].name);
+            id = response.data._embedded.events[0].id;
+            console.log(id);
+            name = response.data._embedded.events[0]._embedded.venues[0].name;
+            console.log(name);
+            date = response.data._embedded.events[0].dates.start.localDate;
+            console.log(date);
+            venue = response.data._embedded.events[0]._embedded.venues[0].name;
+            console.log(venue);
+            address = response.data._embedded.events[0]._embedded.venues[0].address.line1;
+            console.log(address);
+            city = response.data._embedded.events[0]._embedded.venues[0].city.name;
+            console.log(city);
+            state = response.data._embedded.events[0]._embedded.venues[0].state.stateCode;
+            console.log(state);
+            postalCode = response.data._embedded.events[0]._embedded.venues[0].postalCode;
+            console.log(postalCode);
+            fullAddress = address + " | " + city + ", " + state + " | " + postalCode;
+            console.log(fullAddress);
+            console.log("result")
+            console.log("result")
+            console.log("Venue: " + venue);
+            console.log("Location: " + fullAddress);
+            console.log("Date: " + date);
+        });
 
 process.on('unhandledRejection', error => {
     // Won't execute
     console.log('unhandledRejection', error.test);
-  });
-  
-  new Promise((_, reject) => reject({ test: 'woops!' })).catch(() => {});
+});
+
+new Promise((_, reject) => reject({ test: 'woops!' })).catch(() => { });
 
 //   $.ajax({
 //     type:"GET",
