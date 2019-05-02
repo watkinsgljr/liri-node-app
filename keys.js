@@ -1,4 +1,4 @@
-console.log('this is loaded');
+console.log('Liri Loaded');
 
 
 exports.spotify = {

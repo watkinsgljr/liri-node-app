@@ -20,7 +20,7 @@ inquirer.prompt([
     {
         type: "input",
         name: "name",
-        message: "Hello, what is your name???"
+        message: "Hello, my name is Liri. What is your name???"
     },
 
     {
@@ -37,7 +37,7 @@ inquirer.prompt([
     },
 
 ]).then(function (user) {
-    console.log(user.action);
+
 
     if (user.myPassword != "pass") {
 
@@ -49,7 +49,6 @@ inquirer.prompt([
 
 
     else {
-        console.log(user.action);
         getSearchItem(user.action);
 
 
@@ -59,8 +58,7 @@ inquirer.prompt([
 
 
 function getSearchItem(userAction) {
-    console.log("i'm inside");
-    console.log(userAction);
+
     if (userAction === "search concerts") {
         inquirer.prompt([
 
@@ -90,10 +88,8 @@ function getSearchItem(userAction) {
 
 
         ]).then(function (user) {
-            console.log(user.song);
 
             searchItem = (user.song.trim().split("-").join("+"));
-            console.log(searchItem);
             spotifySearch(searchItem);
 
         });
@@ -126,7 +122,6 @@ function getSearchItem(userAction) {
 
 var ticketmasterApi = keys.ticketmaster.id;
 
-console.log(ticketmasterApi);
 
 
 
@@ -135,39 +130,45 @@ console.log(ticketmasterApi);
 
 
 function searchTicketmaster(artist) {
-    axios.get("https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=" + ticketmasterApi + "&keyword=" + artist)
-    .then(function (response) {
-        console.log("result")
-        console.log(response.data._embedded.events[0]._embedded.venues[0].name);
-        id = response.data._embedded.events[0].id;
-        console.log(id);
-        name = response.data._embedded.events[0]._embedded.venues[0].name;
-        console.log(name);
-        date = response.data._embedded.events[0].dates.start.localDate;
-        console.log(date);
-        venue = response.data._embedded.events[0]._embedded.venues[0].name;
-        console.log(venue);
-        address = response.data._embedded.events[0]._embedded.venues[0].address.line1;
-        console.log(address);
-        city = response.data._embedded.events[0]._embedded.venues[0].city.name;
-        console.log(city);
-        state = response.data._embedded.events[0]._embedded.venues[0].state.stateCode;
-        console.log(state);
-        postalCode = response.data._embedded.events[0]._embedded.venues[0].postalCode;
-        console.log(postalCode);
-        fullAddress = address + " | " + city + ", " + state + " | " + postalCode;
-        console.log(fullAddress);
-        console.log("result")
-        console.log("result")
-        console.log("Venue: " + venue);
-        console.log("Location: " + fullAddress);
-        console.log("Date: " + date);
-    });
+    axios.get("https://app.ticketmaster.com/discovery/v2/events.json?countryCode=US&size=10&apikey=" + ticketmasterApi + "&keyword=" + artist)
+        .then(function (response) {
+            // console.log(response.data._embedded.events);
 
-process.on('unhandledRejection', error => {
-    // Won't execute
-    console.log('unhandledRejection', error.test);
-});
+            for (i = 0; i < response.data._embedded.events.length; i++) {
+                
+                let id = response.data._embedded.events[i].id;
+
+                let eventName = response.data._embedded.events[i].name;
+
+                let name = response.data._embedded.events[i]._embedded.venues[0].name;
+
+                let date = response.data._embedded.events[i].dates.start.localDate;
+
+                let venue = response.data._embedded.events[i]._embedded.venues[0].name;
+
+                let address = response.data._embedded.events[i]._embedded.venues[0].address.line1;
+
+                let city = response.data._embedded.events[i]._embedded.venues[0].city.name;
+
+                let state = response.data._embedded.events[i]._embedded.venues[0].state.stateCode;
+
+                let postalCode = response.data._embedded.events[i]._embedded.venues[0].postalCode;
+
+                let fullAddress = address + " | " + city + ", " + state + " | " + postalCode;
+
+                console.log("-------------------------------------------------------------------------")
+                console.log("Event: " + eventName);
+                console.log("Venue: " + venue);
+                console.log("Location: " + fullAddress);
+                console.log("Date: " + date);
+                console.log("-------------------------------------------------------------------------")
+            }
+        });
+
+    process.on('unhandledRejection', error => {
+        // Won't execute
+        console.log('unhandledRejection', error.test);
+    });
 }
 
 new Promise((_, reject) => reject({ test: 'woops!' })).catch(() => { });
@@ -194,21 +195,21 @@ var spotify = new Spotify({
 });
 
 function spotifySearch(track) {
-    spotify.search({ type: 'track', query: track, limit: 1}, function (err, data) {
+    spotify.search({ type: 'track', query: track, limit: 1 }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        console.log(track);
-    
+
+
         console.log("-------------------------------------------------------------------------")
-    
-    
+
+
         // console.log(data.tracks.items);
         console.log(data.tracks.items[0].artists[0].name);
         console.log(data.tracks.items[0].name);
         console.log(data.tracks.items[0].preview_url);
         console.log(data.tracks.items[0].album.name);
-    
+
         console.log("-------------------------------------------------------------------------")
     });
 }
@@ -233,11 +234,11 @@ function spotifySearch(track) {
 
 
 omdbApi = keys.omdb.id;
-console.log(omdbApi);
 
 function searchOmdb(movie) {
     axios.get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=" + omdbApi).then(
         function (response) {
+            console.log("-------------------------------------------------------------------------")
             console.log("Movie Title: " + response.data.Title);
             console.log("Year Released: " + response.data.Year);
             console.log("IMDB Rating: " + response.data.imdbRating);
@@ -246,8 +247,8 @@ function searchOmdb(movie) {
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
             console.log("Actors: " + response.data.Actors);
-        }
-    );
+            console.log("-------------------------------------------------------------------------")
+        });
 }
 
 
