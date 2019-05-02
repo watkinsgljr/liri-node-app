@@ -1,5 +1,5 @@
 console.log('this is loaded');
-var Spotify = require('node-spotify-api');
+
 
 exports.spotify = {
     id: process.env.SPOTIFY_ID,
@@ -9,4 +9,8 @@ exports.spotify = {
 exports.ticketmaster = {
     id: process.env.TICKETMASTER_ID,
     secret: process.env.TICKETMASTER_SECRET
+  };
+
+  exports.omdb = {
+    id: process.env.OMDB_ID
   };
